@@ -6,7 +6,7 @@ const cacheConfig = CacheConfig.create(VERSION);
 const CACHE_VERSION = cacheConfig.version;
 const CACHE_NAMES = cacheConfig;
 const CACHE_PREFIX = cacheConfig.prefix;
-const LOG_PREFIX = `[App ${CACHE_VERSION} - Dev]`;
+const LOG_PREFIX = `[Quilt ${CACHE_VERSION} - Dev]`;
 
 const coreResources = CacheConfig.getCoreResources();
 const staticAssets = CacheConfig.getStaticAssets();

@@ -392,7 +392,7 @@ export class ServiceWorkerManager {
 
     try {
       const cacheNames = await caches.keys();
-      const appCaches = cacheNames.filter(name => name.startsWith('app-cache-'));
+      const appCaches = cacheNames.filter(name => name.startsWith('quilt-cache-'));
 
       console.log(`[App] Clearing ${appCaches.length} cache(s):`, appCaches);
 

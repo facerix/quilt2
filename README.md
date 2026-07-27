@@ -1,6 +1,6 @@
-# Facerix App Template
+# Quilt
 
-Progressive Web App (PWA) template for building offline-first web applications. Built with vanilla TypeScript, Web Components, and Service Workers — compiled with `tsc`, no bundler.
+A tile-shifting puzzle game — something like a 2-D Rubik's cube. A port of the 2013 original to an offline-first PWA: vanilla TypeScript, Web Components, and Service Workers — compiled with `tsc`, no bundler.
 
 ## Architecture
 
@@ -27,7 +27,7 @@ This activates pre-commit hooks that run lint and format checks before each comm
 
 ### Commands
 
-- **`pnpm start` / `pnpm dev`** — runs three concurrent processes: `tsc --watch`, a chokidar asset-copy watcher, and live-server on port 8080 serving `dist/`
+- **`pnpm start` / `pnpm dev`** — runs three concurrent processes: `tsc --watch`, a chokidar asset-copy watcher, and live-server on port 8088 serving `dist/`
 - **`pnpm build`** — one-shot `tsc` build + asset copy into `dist/`
 - **`pnpm typecheck`** — type-check src and tests without emitting
 - **`pnpm test`** — typecheck + run `node --test` against `.ts` files
@@ -84,10 +84,6 @@ Service workers (`sw.js`, `sw-dev.js`, `sw-core.js`) are **not** compiled by `ts
 
 (`dist/` is git-ignored; created by `pnpm build` or `pnpm dev`.)
 
-## Getting Started
-
-See [USING_THIS_TEMPLATE.md](USING_THIS_TEMPLATE.md) for the full step-by-step setup guide.
-
 ## Credits
 
-Template created by [Rylee Corradini](https://www.facerix.com/about).
+Quilt created by [Rylee Corradini](https://www.facerix.com/about).

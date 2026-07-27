@@ -2,15 +2,21 @@
 
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>App Name</title>
+    <title>Quilt</title>
     <meta charset="utf-8" />
-    <meta name="description" content="A simple web app" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
-    <link rel="canonical" href="https://example.facerix.com/" />
-    <meta property="og:title" content="App Name" />
-    <meta property="og:description" content="A simple web app" />
-    <meta property="og:url" content="https://example.facerix.com/" />
+    <meta
+      name="description"
+      content="A tile-shifting puzzle game — something like a 2-D Rubik's cube."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#222844" />
+    <link rel="canonical" href="https://quilt.facerix.com/" />
+    <meta property="og:title" content="Quilt" />
+    <meta
+      property="og:description"
+      content="A tile-shifting puzzle game — something like a 2-D Rubik's cube."
+    />
+    <meta property="og:url" content="https://quilt.facerix.com/" />
     <meta property="og:type" content="website" />
     <meta http-equiv="Content-Language" content="en" />
 
@@ -24,16 +30,42 @@
   </head>
 
   <body class="u-fill-height">
-    <header>
-      <img src="/favicon.svg" alt="App logo" />
-      <h1>App Name</h1>
+    <header id="main-head">
+      <a class="header-identity" href="/">
+        <img id="logo" src="/images/logo.png" alt="" />
+        <h1>Quilt</h1>
+      </a>
+      <button id="btnHelp" type="button">Help</button>
     </header>
-    <main class="u-center">
-      <h3>Welcome to your new app</h3>
+
+    <main>
+      <div id="game">
+        <quilt-board id="board"></quilt-board>
+        <p id="banner" class="u-hidden" role="status"></p>
+      </div>
+
+      <div id="hud">
+        <p id="levelLabel">Level 1</p>
+        <div id="goal">
+          <h3>Goal</h3>
+          <quilt-board id="preview" readonly></quilt-board>
+        </div>
+      </div>
+
+      <div id="controls">
+        <div id="pad">
+          <button id="btnShiftUp" type="button" title="Shift up (I)">&uarr;</button>
+          <button id="btnShiftLeft" type="button" title="Shift left (J)">&larr;</button>
+          <button id="btnShiftDown" type="button" title="Shift down (K)">&darr;</button>
+          <button id="btnShiftRight" type="button" title="Shift right (L)">&rarr;</button>
+        </div>
+        <button id="btnRestart" type="button">Restart level</button>
+      </div>
     </main>
 
     <footer id="main-foot">A&nbsp;<a href="/about.html">Facerix</a>&nbsp;creation</footer>
 
+    <help-overlay></help-overlay>
     <update-notification></update-notification>
   </body>
   <script src="/index.js" type="module"></script>

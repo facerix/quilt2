@@ -2,6 +2,24 @@
 
 Agent-specific guidance. See [README.md](README.md) for project overview, architecture, and coding standards.
 
+## Domain
+
+Quilt is a tile-shifting puzzle — "something like a 2-D Rubik's cube". The player cyclically shifts whole rows and columns of a colored grid until it matches a goal pattern. Ported from a 2013 RequireJS/canvas original (`~/projects/quilt`).
+
+The one architectural rule that matters most here:
+
+> **Game logic never touches the renderer.** `TileSet`, `levelData`, `GameController`, `boardGeometry` and `progress` are all pure and unit-tested under `node --test`. Canvas lives only in `components/QuiltBoard.ts`.
+
+That split is what makes the mechanics testable and the renderer replaceable — the original welded pixel coordinates into the puzzle logic and could not be tested at all.
+
+Specifics worth knowing:
+
+- **Grids are column-major**: `index = x * height + y`. Level arrays in `levelData.ts` are ported byte-for-byte from the original, so levels 8 and 9 render transposed relative to how they were authored. Don't "fix" this casually — it changes the puzzles.
+- **Tile colors are palette indices (0-7)**, resolved to CSS custom properties `--tile-0` … `--tile-7`. Canvas can't read CSS variables, so `QuiltBoard` reads them once via `getComputedStyle` and re-reads on color-scheme change.
+- **No game loop.** `requestAnimationFrame` runs only while a shift animation is in flight.
+- **DataStore holds progress only** (`LevelProgress` records keyed by `levelIndex`, since `addItem()` mints its own `id`). Levels are content and live in source.
+- **Tests can import app source with absolute `/src/...` specifiers** thanks to `tests/browserSpecifierHooks.mjs`, registered via `node --test --import ./tests/register.mjs`.
+
 ## TypeScript
 
 The project is TypeScript, compiled with `tsc` (no bundler) to `dist/`. `live-server` serves `dist/` as the web root in dev. Key conventions:
@@ -56,7 +74,15 @@ el.dataset.id = '456';
 
 | File | Purpose |
 |------|---------|
-| `src/DataStore.ts` | Central data store (localStorage) |
+| `src/TileSet.ts` | Puzzle mechanics. **Pure** — no canvas, DOM or pixel knowledge. |
+| `src/levelData.ts` | The 9 levels. Column-major grids (`index = x * height + y`). |
+| `src/GameController.ts` | Game state machine and level progression. Also DOM-free. |
+| `src/boardGeometry.ts` | Pure cell-size / hit-testing math for the board. |
+| `src/gestures.ts` | Pointer tap + swipe handling. |
+| `src/progress.ts` | Pure selectors over stored `LevelProgress` records. |
+| `components/QuiltBoard.ts` | `<quilt-board>` canvas renderer. |
+| `components/HelpOverlay.ts` | `<help-overlay>` objective/controls dialog. |
+| `src/DataStore.ts` | Central data store (localStorage, key `quilt`) |
 | `src/domUtils.ts` | `h()` helper, `isDevelopmentMode()` |
 | `src/ServiceWorkerManager.ts` | Service worker lifecycle |
 | `src/uuid.ts` | Thin wrapper over `crypto.randomUUID()` |
@@ -127,7 +153,7 @@ UpdateNotification (dispatched by component)
 
 Run `pnpm test` (typecheck + `node --test`). Tests live in `tests/`, import source with relative paths and the `.ts` extension, and run directly under Node 24's built-in type stripping (no compile step).
 
-For manual UI testing: use @Browser at `http://localhost:8080` (assume `pnpm dev` is already running). Verify UI, interactions, console, service worker.
+For manual UI testing: use @Browser at `http://localhost:8088` (assume `pnpm dev` is already running). Verify UI, interactions, console, service worker.
 
 ## Checklist
 

@@ -4,7 +4,34 @@
   /* Chrome-only for now but this will allow smooth size transitions */
   interpolate-size: allow-keywords;
 
-  --accent-color: #2ec6fe;
+  --accent-color: #00a0d1;
+
+  --page-bg: #222844;
+  --page-surface: #1b2039;
+  --page-color: #f4f6ff;
+
+  /*
+   * Tile palette. The canvas can't read CSS variables directly, so QuiltBoard
+   * resolves these once via getComputedStyle — swap them here to retheme the
+   * whole game. Slots follow the original's color order.
+   */
+  --tile-0: #1b1f33;
+  --tile-1: #f5f7ff;
+  --tile-2: #e5484d;
+  --tile-3: #f2810c;
+  --tile-4: #ffd23f;
+  --tile-5: #46c26a;
+  --tile-6: #00a0d1;
+  --tile-7: #8b5cf6;
+
+  --board-bg: #2b3350;
+  --board-border: rgba(255, 255, 255, 0.28);
+  /*
+   * The pivot marker is a ring, not a filled disc: a translucent fill vanishes
+   * against --tile-1. The dark halo is what keeps it legible on light tiles.
+   */
+  --board-selection: rgba(255, 255, 255, 0.95);
+  --board-selection-outline: rgba(9, 12, 26, 0.8);
 }
 
 html {
@@ -22,8 +49,8 @@ body {
   flex-direction: column;
   padding: 0;
   margin: 0;
-  background-color: #f0f0f0;
-  color: #303030;
+  background-color: var(--page-bg);
+  color: var(--page-color);
 
   font-family: Futura, 'Trebuchet MS', Arial, sans-serif;
   font-style: normal;
@@ -100,7 +127,7 @@ main {
 
   padding: 8px;
   overflow-y: auto;
-  background-color: #fafafa;
+  background-color: var(--page-surface);
 }
 
 .btn,
@@ -166,6 +193,116 @@ a.btn {
 
 a:focus-visible {
   outline: var(--accent-color) auto 1px;
+}
+
+/* quilt game layout */
+
+#game {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#board {
+  width: 100%;
+  height: 100%;
+  max-width: 34rem;
+}
+
+#banner {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  translate: 0 -50%;
+  margin: 0;
+  padding: 0.6em 1em;
+  text-align: center;
+  font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+  font-variant: common-ligatures small-caps;
+  font-size: clamp(1.25rem, 6vw, 2rem);
+  color: var(--page-color);
+  background-color: color-mix(in srgb, var(--accent-color) 82%, transparent);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+#hud {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.25rem 0;
+}
+
+#levelLabel {
+  margin: 0;
+  font-variant: common-ligatures small-caps;
+  letter-spacing: 0.06em;
+}
+
+#goal {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  h3 {
+    margin: 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+  }
+}
+
+#preview {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+#controls {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0 calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+#pad {
+  display: grid;
+  grid-template-columns: repeat(3, 2.75rem);
+  grid-template-rows: repeat(2, 2.75rem);
+  gap: 0.35rem;
+
+  button {
+    padding: 0;
+    font-size: 1.2rem;
+    color: var(--page-color);
+    border: 1px solid var(--board-border);
+    background-color: color-mix(in srgb, var(--page-color) 8%, transparent);
+  }
+}
+
+#btnShiftUp {
+  grid-area: 1 / 2;
+}
+#btnShiftLeft {
+  grid-area: 2 / 1;
+}
+#btnShiftDown {
+  grid-area: 2 / 2;
+}
+#btnShiftRight {
+  grid-area: 2 / 3;
+}
+
+#btnHelp,
+#btnRestart {
+  color: var(--page-color);
+  border: 1px solid var(--board-border);
 }
 
 /* util classes */

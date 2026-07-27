@@ -7,7 +7,7 @@
  * Creates cache configuration from a version string and provides shared resource lists
  */
 const CacheConfig = {
-  create(version, prefix = 'app-cache-') {
+  create(version, prefix = 'quilt-cache-') {
     return {
       version,
       name: `${prefix}v${version}`,
@@ -17,6 +17,9 @@ const CacheConfig = {
     };
   },
   
+  // There is no bundler, so every module is its own request. Each one has to be
+  // listed here or a cold install goes offline with a half-loaded app.
+  // Keep in sync with the emitted tree: `pnpm build && find dist -name '*.js'`.
   getCoreResources() {
     return [
       '/',
@@ -26,9 +29,23 @@ const CacheConfig = {
       '/about.js',
       '/main.css',
       '/manifest.json',
+      '/components/ConfirmationModal.js',
+      '/components/HelpOverlay.js',
+      '/components/QuiltBoard.js',
+      '/components/UpdateNotification.js',
+      '/src/boardGeometry.js',
+      '/src/DataStore.js',
+      '/src/domUtils.js',
+      '/src/GameController.js',
+      '/src/gestures.js',
+      '/src/levelData.js',
+      '/src/progress.js',
+      '/src/ServiceWorkerManager.js',
+      '/src/TileSet.js',
+      '/src/uuid.js',
     ];
   },
-  
+
   getStaticAssets() {
     return [
       '/favicon.ico',
@@ -38,6 +55,7 @@ const CacheConfig = {
       '/icons/icon512_maskable.png',
       '/icons/icon512_rounded.png',
       '/icons/icon-192x192.png',
+      '/images/logo.png',
     ];
   },
 };

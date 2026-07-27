@@ -12,6 +12,12 @@ export interface DataRecord {
   [key: string]: unknown;
 }
 
+/**
+ * localStorage key for this app's data. Changing it strands existing players'
+ * saves, so it needs a migration rather than an edit.
+ */
+const STORAGE_KEY = 'quilt';
+
 export type ChangeType = 'init' | 'add' | 'update' | 'delete';
 
 export interface DataStoreChangeDetail {
@@ -53,7 +59,7 @@ class DataStore extends EventTarget {
     } catch (error) {
       console.warn('[DataStore] Failed to parse stored JSON, resetting items.', error);
       try {
-        window.localStorage.setItem('items', '[]');
+        window.localStorage.setItem(STORAGE_KEY, '[]');
       } catch (storageError) {
         console.warn('[DataStore] Failed to reset stored items.', storageError);
       }
@@ -62,10 +68,10 @@ class DataStore extends EventTarget {
   }
 
   async init(): Promise<void> {
-    let savedItemsJson = window.localStorage.getItem('items');
+    let savedItemsJson = window.localStorage.getItem(STORAGE_KEY);
     if (!savedItemsJson) {
       savedItemsJson = '[]';
-      window.localStorage.setItem('items', savedItemsJson);
+      window.localStorage.setItem(STORAGE_KEY, savedItemsJson);
     }
     this.#items = this.#loadRecordsFromJson(savedItemsJson);
     this.#reindex();
@@ -86,7 +92,7 @@ class DataStore extends EventTarget {
   }
 
   #saveItems(): void {
-    window.localStorage.setItem('items', JSON.stringify(this.#items));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.#items));
   }
 
   #emitChangeEvent(
